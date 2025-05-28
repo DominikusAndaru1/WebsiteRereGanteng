@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <title>Jadwal Makan Mingguan Berdasarkan Usia</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      padding: 20px;
+    }
+    label, input, button {
+      display: block;
+      margin-bottom: 10px;
+    }
+    button {
+      padding: 8px 16px;
+    }
+    .section {
+      margin-top: 30px;
+    }
+    .result {
+      margin-top: 10px;
+      font-weight: bold;
+      color: green;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 15px;
+      font-size: 14px;
+    }
+    table, th, td {
+      border: 1px solid #aaa;
+    }
+    th, td {
+      padding: 8px;
+      text-align: center;
+    }
+    td.menu {
+      text-align: left;
+    }
+  </style>
+</head>
+<body>
+
+  <h2>Jadwal Makan Mingguan Berdasarkan Usia (12–50 Tahun)</h2>
+
+  <label for="usia">Masukkan Usia Anda:</label>
+  <input type="number" id="usia" min="12" max="50" required>
+
+  <button onclick="prosesData()">Tampilkan Jadwal</button>
+
+  <div class="section">
+    <h3>Perkiraan Berat dan Tinggi Badan</h3>
+    <div class="result" id="hasilTinggiBerat"></div>
+  </div>
+
+  <div class="section">
+    <h3>Jadwal Makan Mingguan</h3>
+    <div class="result" id="hasilJadwal"></div>
+  </div>
+
+  <script>
+    function prosesData() {
+      const usia = parseInt(document.getElementById("usia").value);
+      const hasilTinggiBerat = document.getElementById("hasilTinggiBerat");
+      const hasilJadwal = document.getElementById("hasilJadwal");
+
+      if (isNaN(usia) || usia < 12 || usia > 50) {
+        hasilTinggiBerat.innerHTML = "<p>Masukkan usia antara 12 hingga 50 tahun.</p>";
+        hasilJadwal.innerHTML = "";
+        return;
+      }
+
+      // Estimasi tinggi & berat
+      let tinggi = "";
+      let berat = "";
+      if (usia >= 12 && usia <= 15) {
+        tinggi = "140–155 cm"; berat = "35–50 kg";
+      } else if (usia >= 16 && usia <= 19) {
+        tinggi = "155–165 cm"; berat = "48–60 kg";
+      } else if (usia >= 20 && usia <= 30) {
+        tinggi = "160–175 cm"; berat = "55–70 kg";
+      } else if (usia >= 31 && usia <= 40) {
+        tinggi = "160–180 cm"; berat = "58–80 kg";
+      } else if (usia >= 41 && usia <= 50) {
+        tinggi = "155–180 cm"; berat = "60–85 kg";
+      }
+
+      hasilTinggiBerat.innerHTML = `
+        <p>Perkiraan tinggi badan: <strong>${tinggi}</strong></p>
+        <p>Perkiraan berat badan: <strong>${berat}</strong></p>
+      `;
+
+      // Estimasi kebutuhan gizi harian
+      let kalori = 0, protein = 0, karbo = 0;
+      if (usia >= 12 && usia <= 15) {
+        kalori = 2200; protein = 50; karbo = 275;
+      } else if (usia >= 16 && usia <= 19) {
+        kalori = 2500; protein = 60; karbo = 300;
+      } else if (usia >= 20 && usia <= 30) {
+        kalori = 2400; protein = 65; karbo = 290;
+      } else if (usia >= 31 && usia <= 40) {
+        kalori = 2300; protein = 60; karbo = 280;
+      } else if (usia >= 41 && usia <= 50) {
+        kalori = 2200; protein = 55; karbo = 270;
+      }
+
+      // Menu makanan (acak bisa dikembangkan)
+      const menuMakanan = {
+        'Pagi': 'Nasi merah, telur rebus, tumis kangkung, susu kedelai',
+        'Siang': 'Nasi putih, ayam panggang, sayur bayam, buah pisang',
+        'Malam': 'Kentang rebus, ikan bakar, tumis brokoli, buah apel'
+      };
+
+      const hari = ['Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat', 'Sabtu', 'Minggu'];
+      const waktu = ['Pagi', 'Siang', 'Malam'];
+
+      let tabel = "<table><thead><tr><th>Hari</th><th>Waktu Makan</th><th>Kalori</th><th>Protein</th><th>Karbohidrat</th><th>Menu Makanan</th></tr></thead><tbody>";
+
+      for (let h of hari) {
+        for (let w of waktu) {
+          tabel += `<tr>
+            <td>${h}</td>
+            <td>${w}</td>
+            <td>${Math.round(kalori / 3)}</td>
+            <td>${Math.round(protein / 3)}</td>
+            <td>${Math.round(karbo / 3)}</td>
+            <td class="menu">${menuMakanan[w]}</td>
+          </tr>`;
+        }
+      }
+
+      tabel += "</tbody></table>";
+      hasilJadwal.innerHTML = tabel;
+    }
+  </script>
+</body>
+</html>
