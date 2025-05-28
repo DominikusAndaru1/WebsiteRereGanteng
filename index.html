@@ -240,5 +240,77 @@
       hasilJadwal.innerHTML = tabel;
     }
   </script>
+  function prosesData() {
+  const usia = parseInt(document.getElementById("usia").value);
+  const hasilTinggiBerat = document.getElementById("hasilTinggiBerat");
+  const hasilJadwal = document.getElementById("hasilJadwal");
+
+  if (isNaN(usia) || usia < 12 || usia > 50) {
+    hasilTinggiBerat.innerHTML = "<p style='color:red;'>Masukkan usia antara 12 hingga 50 tahun.</p>";
+    hasilJadwal.innerHTML = "";
+    return;
+  }
+
+  let tinggi = "", berat = "";
+  if (usia <= 15) {
+    tinggi = "140–155 cm"; berat = "35–50 kg";
+  } else if (usia <= 19) {
+    tinggi = "155–165 cm"; berat = "48–60 kg";
+  } else if (usia <= 30) {
+    tinggi = "160–175 cm"; berat = "55–70 kg";
+  } else if (usia <= 40) {
+    tinggi = "160–180 cm"; berat = "58–80 kg";
+  } else {
+    tinggi = "155–180 cm"; berat = "60–85 kg";
+  }
+
+  hasilTinggiBerat.innerHTML = `
+    <h3>Perkiraan Berat & Tinggi Badan</h3>
+    <p>Tinggi: <strong>${tinggi}</strong></p>
+    <p>Berat: <strong>${berat}</strong></p>
+  `;
+
+  let kalori = 0, protein = 0, karbo = 0;
+  if (usia <= 15) {
+    kalori = 2200; protein = 50; karbo = 275;
+  } else if (usia <= 19) {
+    kalori = 2500; protein = 60; karbo = 300;
+  } else if (usia <= 30) {
+    kalori = 2400; protein = 65; karbo = 290;
+  } else if (usia <= 40) {
+    kalori = 2300; protein = 60; karbo = 280;
+  } else {
+    kalori = 2200; protein = 55; karbo = 270;
+  }
+
+  const menuMakanan = {
+    'Pagi': 'Nasi merah, telur rebus, tumis kangkung, susu kedelai',
+    'Siang': 'Nasi putih, ayam panggang, sayur bayam, buah pisang',
+    'Malam': 'Kentang rebus, ikan bakar, tumis brokoli, buah apel'
+  };
+
+  const hari = ['Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat', 'Sabtu', 'Minggu'];
+  const waktu = ['Pagi', 'Siang', 'Malam'];
+
+  let tabel = "<h3>Jadwal Makan Mingguan</h3>";
+  tabel += "<table><thead><tr><th>Hari</th><th>Waktu</th><th>Kalori</th><th>Protein</th><th>Karbo</th><th>Menu</th></tr></thead><tbody>";
+
+  for (let h of hari) {
+    for (let w of waktu) {
+      tabel += `<tr>
+        <td>${h}</td>
+        <td>${w}</td>
+        <td>${Math.round(kalori / 3)}</td>
+        <td>${Math.round(protein / 3)}</td>
+        <td>${Math.round(karbo / 3)}</td>
+        <td class="menu">${menuMakanan[w]}</td>
+      </tr>`;
+    }
+  }
+
+  tabel += "</tbody></table>";
+  hasilJadwal.innerHTML = tabel;
+}
+  </script>
 </body>
 </html>
